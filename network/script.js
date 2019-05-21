@@ -20332,12 +20332,17 @@ var g = svg.append("g")
 
 //draw lines for the links 
 var link = g.append("g")
-      .attr("class", "links")
+    .attr("class", "links")
     .selectAll("line")
     .data(links_data)
     .enter().append("line")
-      .attr("stroke-width", 5)
-      .style("stroke", "#ececec");        
+    .attr("stroke-width", 5)
+    .attr("source", function(l) {
+        return l.source.id;
+    }).attr("target", function(l) {
+        return l.target.id;
+    })
+    .style("stroke", "#ececec");        
 
 //draw circles for the nodes 
 var node = g.append("g")
@@ -20347,6 +20352,9 @@ var node = g.append("g")
         .enter()
         .append("circle")
         .attr("r", radius)
+        .attr("title", function(d) {
+            return d.id;
+        })
         .attr("fill", circleColour)
         .attr("cluster", function(d) {
             return d.cluster;
@@ -20451,8 +20459,12 @@ function tickActions() {
 function node_click(d) {
     reset_colors();
     same_cluster = document.querySelectorAll('[cluster="' + d.cluster + '"]');
+    linked_to = document.querySelectorAll('[source="' + d.id + '"], [target="' + d.id + '"]');
     for(i=0; i<same_cluster.length; i++) {
         same_cluster[i].style.fill = "#ff0000";
+    }
+    for(i=0; i<linked_to.length; i++) {
+        linked_to[i].style.stroke = "#0000ff";
     }
 }
 
@@ -20460,5 +20472,9 @@ function reset_colors() {
     circles = document.querySelectorAll("circle");
     for(i=0; i<circles.length; i++) {
         circles[i].style.fill = "#000";
+    }
+    lines = document.querySelectorAll("line");
+    for(i=0; i<lines.length; i++) {
+        lines[i].style.stroke = "#ececec";
     }
 }
