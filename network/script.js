@@ -1,6 +1,12 @@
+window.addEventListener("load", function() {
 
-//create somewhere to put the force directed graph
-var svg = d3.select("svg"),
+        var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        document.querySelector("svg").setAttribute("width", w);
+        document.querySelector("svg").setAttribute("height", h);
+
+
+    var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
     
@@ -20458,6 +20464,7 @@ function tickActions() {
 
 function node_click(d) {
     reset_colors();
+    document.querySelector("input").value = d.id;
     same_cluster = document.querySelectorAll('[cluster="' + d.cluster + '"]');
     linked_to = document.querySelectorAll('[source="' + d.id + '"], [target="' + d.id + '"]');
     for(i=0; i<same_cluster.length; i++) {
@@ -20478,3 +20485,4 @@ function reset_colors() {
         lines[i].style.stroke = "#ececec";
     }
 }
+})
